@@ -5,12 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Animator _animator;
-    public float speed;
+    public float speed = 5f;
+    private Rigidbody rb;
+    public float jumpSpeed = 150f;
     void Start()
     {
         _animator = GetComponent<Animator>();
-        speed = 1f;
         Cursor.lockState = CursorLockMode.Locked;
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -28,6 +30,16 @@ public class PlayerController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
         }
-        
+
+        if (Input.GetKeyDown("space"))
+        {
+            Jump();
+        }
+    }
+
+    private void Jump()
+    {
+        _animator.SetTrigger("Jump");
+        rb.AddForce(Vector3.up * jumpSpeed);
     }
 }
