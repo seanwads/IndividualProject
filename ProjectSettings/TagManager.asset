@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Portal1
   - Portal2
+  - PlayerCamera
+  - PlayerCenter
   layers:
   - Default
   - TransparentFX

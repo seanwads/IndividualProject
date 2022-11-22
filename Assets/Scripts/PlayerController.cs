@@ -6,18 +6,23 @@ public class PlayerController : MonoBehaviour
 {
     private Animator _animator;
     public float speed = 5f;
-    private Rigidbody rb;
+    private Rigidbody _rb;
     public float jumpSpeed = 150f;
+    private Vector3 _velocity;
+    private CameraController _cameraController;
     void Start()
     {
         _animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
-        rb = gameObject.GetComponent<Rigidbody>();
+        _rb = gameObject.GetComponent<Rigidbody>();
+        _cameraController = GetComponentInChildren<CameraController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        _velocity = _rb.velocity;
+        
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
@@ -40,6 +45,15 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         _animator.SetTrigger("Jump");
-        rb.AddForce(Vector3.up * jumpSpeed);
+        _rb.AddForce(Vector3.up * jumpSpeed);
+    }
+
+    public void Teleport(Transform target)
+    {
+        Vector3 lookDirection = target.position - transform.position;
+        
+        transform.position = target.position;
+        _cameraController.mouseLook = new Vector2(0f, 0f);
+        //_rb.AddForce(_velocity);
     }
 }

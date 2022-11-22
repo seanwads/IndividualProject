@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     public float sensitivity;
     public float smoothing;
     public bool mouseLookActive;
-    private Vector2 _mouseLook;
+    public Vector2 mouseLook;
     private GameObject _player;
     private Vector2 _smoothV;
 
@@ -29,13 +29,13 @@ public class CameraController : MonoBehaviour
         _smoothV.x = Mathf.Lerp(_smoothV.x, md.x, 1f / smoothing);
         _smoothV.y = Mathf.Lerp(_smoothV.y, md.y, 1f / smoothing);
         // incrementally add to the camera look
-        _mouseLook += _smoothV;
+        mouseLook += _smoothV;
 
-        _mouseLook.y = Mathf.Clamp(_mouseLook.y,-90f, 90f);
+        mouseLook.y = Mathf.Clamp(mouseLook.y,-90f, 90f);
             
         // vector3.right means the x-axis
-        transform.localRotation = Quaternion.AngleAxis(-_mouseLook.y, Vector3.right);
-        _player.transform.localRotation = Quaternion.AngleAxis(_mouseLook.x, _player.transform.up);
+        transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
+        _player.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, _player.transform.up);
         
     }
 }
