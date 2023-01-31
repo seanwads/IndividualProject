@@ -54,6 +54,6 @@ public class PlayerController : MonoBehaviour
         
         transform.position = target.position;
         _cameraController.mouseLook = new Vector2(0f, 0f);
-        //_rb.AddForce(_velocity);
+        _rb.AddForce(_velocity);
     }
 }

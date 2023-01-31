@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PortalController : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PortalController : MonoBehaviour
     private Camera _cam;
     private GameObject _wall;
     private Collider _wallCollider;
+    
 
     void Start()
     {
@@ -30,6 +32,9 @@ public class PortalController : MonoBehaviour
         {
             _pairedPortal = GameObject.FindGameObjectWithTag("Portal1");
         }
+
+        int wallLayer = LayerMask.NameToLayer("PortalWalls");
+        _wall.layer = wallLayer;
     }
     
     void Update()
@@ -59,7 +64,9 @@ public class PortalController : MonoBehaviour
     private void CameraMovement()
     {
         Vector3 playerPos = _playerCam.transform.position - _pairedPortal.transform.position;
-        
-        _cam.transform.rotation = Quaternion.LookRotation(playerPos, Vector3.up);
+
+        _cam.transform.localRotation = Quaternion.LookRotation(playerPos, Vector3.up);
+        _cam.transform.position = new Vector3(transform.position.x - playerPos.x, _playerCam.transform.position.y,
+            transform.position.z - playerPos.z);
     }
 }
