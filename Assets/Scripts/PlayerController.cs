@@ -50,10 +50,8 @@ public class PlayerController : MonoBehaviour
 
     public void Teleport(Transform target)
     {
-        Vector3 lookDirection = target.position - transform.position;
-        
         transform.position = target.position;
-        _cameraController.mouseLook = new Vector2(0f, 0f);
+        _cameraController.mouseLook = new Vector2(target.eulerAngles.y, 0f);
         _rb.AddForce(_velocity);
     }
 }
