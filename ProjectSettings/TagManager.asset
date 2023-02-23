@@ -8,6 +8,9 @@ TagManager:
   - Portal2
   - PlayerCamera
   - PlayerCenter
+  - PickupAnchor
+  - PickupItem
+  - ItemCenter
   layers:
   - Default
   - TransparentFX

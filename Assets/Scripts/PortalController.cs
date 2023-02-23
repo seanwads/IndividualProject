@@ -1,22 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Matrix4x4 = UnityEngine.Matrix4x4;
-using Plane = UnityEngine.Plane;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector4 = UnityEngine.Vector4;
 
 public class PortalController : MonoBehaviour
 {
-    public GameObject _pairedPortal;
-    public Transform _targetPos;
+    private GameObject _pairedPortal;
+    private Transform _targetPos;
     private PlayerController _player;
     private Camera _playerCam;
     private Camera _cam;
@@ -26,6 +17,13 @@ public class PortalController : MonoBehaviour
 
     public float nearClipOffset = 0.05f;
     public float nearClipLimit = 0.2f;
+
+    private ItemPickup _itemToSplit;
+    private GameObject _splitItem;
+    private Rigidbody _splitItemRb;
+    public bool itemInPortal;
+    private bool _itemHasPassed;
+    private bool _itemIsThrough;
 
     void Start()
     {
@@ -38,41 +36,88 @@ public class PortalController : MonoBehaviour
         if (gameObject.CompareTag("Portal1")) 
         {
             _pairedPortal = GameObject.FindGameObjectWithTag("Portal2");
-            _pairedPortal.transform.GetChild(2).gameObject.layer = LayerMask.NameToLayer("Portal1Cull");
-
-            
         }
         else
         {
             _pairedPortal = GameObject.FindGameObjectWithTag("Portal1");
-            _pairedPortal.transform.GetChild(2).gameObject.layer = LayerMask.NameToLayer("Portal2Cull");
         }
         
         _targetPos = _pairedPortal.transform.GetChild(0);
     }
     
+
     void LateUpdate()
     {
         CameraMovement();
         CalculateClipPlane();
+
+        if (itemInPortal)
+        {
+            MoveSplitItem();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _wallCollider.enabled = false;
-        }
+        _wallCollider.enabled = false;
 
         if (other.CompareTag("PlayerCenter"))
         {
             _player.Teleport(_targetPos);
+            Destroy(_splitItem);
+            itemInPortal = false;
+            _itemHasPassed = false;
+            _itemIsThrough = false;
+        }
+
+        if (other.CompareTag("PickupItem"))
+        {
+            if (!_itemIsThrough)
+            {
+                _itemToSplit = other.GetComponent<ItemPickup>();
+                SplitItem();
+            }
+            else
+            {
+                _itemIsThrough = false;
+            }
+            
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("PickupItem"))
+        {
+            if (!_itemIsThrough)
+            {
+                itemInPortal = true;
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         _wallCollider.enabled = true;
+        
+        if (other.CompareTag("PickupItem"))
+        {
+            if (_itemHasPassed)
+            {
+                _itemIsThrough = true;
+            }
+            else
+            {
+                itemInPortal = false;
+                Destroy(_splitItem);
+            }
+        }
+
+        if (other.CompareTag("ItemCenter"))
+        {
+            _itemHasPassed = !_itemHasPassed;
+        }
+        
     }
 
     private void CameraMovement()
@@ -104,4 +149,27 @@ public class PortalController : MonoBehaviour
             _cam.projectionMatrix = _playerCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
         }
     }
+
+    private void SplitItem()
+    {
+        _splitItem = Instantiate(_itemToSplit.mirror, _pairedPortal.transform.position, Quaternion.identity);
+        _splitItemRb = _splitItem.GetComponent<Rigidbody>();
+        
+    }
+
+    private void MoveSplitItem()
+    {
+        _splitItemRb.isKinematic = true;
+        _splitItemRb.velocity = Vector3.zero;
+        _splitItemRb.angularVelocity = Vector3.zero;
+        
+        Vector3 itemOffsetPos = transform.InverseTransformPoint(_itemToSplit.transform.position);
+        itemOffsetPos = Vector3.Scale(itemOffsetPos, new Vector3(-1, 1, -1));
+        _splitItem.transform.position = _pairedPortal.transform.TransformPoint(itemOffsetPos);
+        
+        Vector3 itemOffsetRot = transform.InverseTransformDirection(_itemToSplit.transform.forward);
+        itemOffsetRot = Vector3.Scale(itemOffsetRot, new Vector3(-1, 1, -1));
+        _splitItem.transform.forward = _pairedPortal.transform.TransformDirection(itemOffsetRot);
+    }
+
 }
