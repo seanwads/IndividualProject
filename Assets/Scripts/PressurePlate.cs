@@ -5,22 +5,19 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-
+    [SerializeField] public int plateId;
+    private SceneManager _sceneManager;
     void Start()
     {
+        _sceneManager = FindObjectOfType<SceneManager>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Rigidbody>().mass >= 1)
         {
-            //trigger pressure plate
+            _sceneManager.DoorAction(plateId);
             Debug.Log("triggered");
         }
     }

@@ -11,6 +11,7 @@ TagManager:
   - PickupAnchor
   - PickupItem
   - ItemCenter
+  - Door
   layers:
   - Default
   - TransparentFX

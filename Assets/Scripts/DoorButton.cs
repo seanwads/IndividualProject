@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class DoorButton : MonoBehaviour
 {
+    [SerializeField] public int buttonId;
     private Camera _cam;
+    private SceneManager _sceneManager;
+    
     void Start()
     {
         _cam = GameObject.FindGameObjectWithTag("PlayerCamera").GetComponent<Camera>();
+        _sceneManager = FindObjectOfType<SceneManager>();
     }
     
     void Update()
@@ -21,7 +25,7 @@ public class DoorButton : MonoBehaviour
             {
                 if (hit.transform.GetComponent<DoorButton>() != null)
                 {
-                    //button triggered
+                    _sceneManager.DoorAction(buttonId);
                     Debug.Log("Button triggered");
                 }
             }
