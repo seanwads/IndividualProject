@@ -5,14 +5,20 @@ using UnityEngine;
 public class DoorController : MonoBehaviour
 {
     [SerializeField] public int doorId;
+    private GameObject _doorMesh;
+
+    void Start()
+    {
+        _doorMesh = transform.GetChild(0).gameObject;
+    }
 
     public void OpenDoor()
     {
-        gameObject.SetActive(false);
+        _doorMesh.SetActive(false);
     }
 
     public void CloseDoor()
     {
-        gameObject.SetActive(true);
+        _doorMesh.SetActive(true);
     }
 }

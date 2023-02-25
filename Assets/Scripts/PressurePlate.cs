@@ -6,6 +6,8 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     [SerializeField] public int plateId;
+    [SerializeField] public float plateTimer = 3f;
+    [SerializeField] public float massRequirement = 1f;
     private SceneManager _sceneManager;
     void Start()
     {
@@ -15,10 +17,17 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Rigidbody>().mass >= 1)
+        if (other.GetComponent<Rigidbody>().mass >= massRequirement)
         {
             _sceneManager.DoorAction(plateId);
-            Debug.Log("triggered");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Rigidbody>().mass >= massRequirement)
+        {
+            _sceneManager.DoorAction(plateId);
         }
     }
 }

@@ -20,14 +20,13 @@ public class SceneManager : MonoBehaviour
     public void DoorAction(int id)
     {
         DoorController door = _doors[id];
-        Debug.Log(door);
-        if (door.gameObject.activeSelf)
+        if (door.transform.GetChild(0).gameObject.activeSelf)
         {
-            door.CloseDoor();
+            door.OpenDoor();
         }
         else
         {
-            door.OpenDoor();
+            door.CloseDoor();
         }
     }
 }

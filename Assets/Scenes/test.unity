@@ -165,6 +165,52 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &20537881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 20537883}
+  - component: {fileID: 20537882}
+  m_Layer: 0
+  m_Name: Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &20537882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20537881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c174cef32368e62488dd0b5192bfd08c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorId: 0
+--- !u!4 &20537883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20537881}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.265831, y: -2.0574496, z: 4.7437487}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1688549738}
+  m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &67981720 stripped
@@ -582,6 +628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonId: 0
+  buttonTimer: 3
 --- !u!1 &719234062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,9 +1531,8 @@ GameObject:
   - component: {fileID: 1688549737}
   - component: {fileID: 1688549736}
   - component: {fileID: 1688549735}
-  - component: {fileID: 1688549739}
   m_Layer: 0
-  m_Name: Door
+  m_Name: DoorMesh
   m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1562,27 +1608,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688549734}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.051, y: 2, z: 7.334}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.316831, y: 4.0574493, z: 2.5902514}
   m_LocalScale: {x: 2, y: 4, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 20537883}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1688549739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1688549734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c174cef32368e62488dd0b5192bfd08c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doorId: 0
 --- !u!4 &1746399665 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6251133825168590068, guid: b42b5a5dfea2df64e8079d51b91d6a88,
@@ -1844,6 +1877,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 399228276028903040, guid: e436d17e22d7e8842abdfc1fabf955e3,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.08614418
+      objectReference: {fileID: 0}
+    - target: {fileID: 399228276028903040, guid: e436d17e22d7e8842abdfc1fabf955e3,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.17807211
+      objectReference: {fileID: 0}
     - target: {fileID: 399228276028903041, guid: e436d17e22d7e8842abdfc1fabf955e3,
         type: 3}
       propertyPath: m_Name
@@ -2221,6 +2264,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 6586126365202831089, guid: bfdc7cdf59d20434cbcf8f1395371b27,
+        type: 3}
+      propertyPath: m_TagString
+      value: DoorButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfdc7cdf59d20434cbcf8f1395371b27, type: 3}

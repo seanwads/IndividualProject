@@ -5,6 +5,7 @@ using UnityEngine;
 public class DoorButton : MonoBehaviour
 {
     [SerializeField] public int buttonId;
+    [SerializeField] public float buttonTimer = 3f;
     private Camera _cam;
     private SceneManager _sceneManager;
     
@@ -23,12 +24,18 @@ public class DoorButton : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 3f))
             {
-                if (hit.transform.GetComponent<DoorButton>() != null)
+                if (hit.transform.CompareTag("DoorButton"))
                 {
-                    _sceneManager.DoorAction(buttonId);
-                    Debug.Log("Button triggered");
+                    StartCoroutine(ButtonPress());
                 }
             }
         }
+    }
+
+    private IEnumerator ButtonPress()
+    {
+        _sceneManager.DoorAction(buttonId);
+        yield return new WaitForSeconds(buttonTimer);
+        _sceneManager.DoorAction(buttonId);
     }
 }

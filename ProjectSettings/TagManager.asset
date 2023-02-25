@@ -12,6 +12,7 @@ TagManager:
   - PickupItem
   - ItemCenter
   - Door
+  - DoorButton
   layers:
   - Default
   - TransparentFX
