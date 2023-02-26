@@ -43,6 +43,8 @@ public class PortalController : MonoBehaviour
         }
         
         _targetPos = _pairedPortal.transform.GetChild(0);
+
+        _cam.aspect = ((float)Screen.width) / Screen.height;
     }
     
 
@@ -146,7 +148,7 @@ public class PortalController : MonoBehaviour
 
             // Update projection based on new clip plane
             // Calculate matrix with player cam so that player camera settings (fov, etc) are used
-            _cam.projectionMatrix = _playerCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
+            _cam.projectionMatrix = _cam.CalculateObliqueMatrix(clipPlaneCameraSpace);
         }
     }
 
