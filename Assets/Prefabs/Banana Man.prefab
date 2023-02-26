@@ -1964,7 +1964,7 @@ GameObject:
   - component: {fileID: 6097130450453373280}
   m_Layer: 0
   m_Name: PickupAnchor
-  m_TagString: Untagged
+  m_TagString: PickupAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
