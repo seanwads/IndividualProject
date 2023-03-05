@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
+    [SerializeField] public GameObject[] rooms;
     public Dictionary<int, DoorController> _doors = new Dictionary<int, DoorController>();
 
     void Start()
@@ -28,5 +29,11 @@ public class SceneManager : MonoBehaviour
         {
             door.CloseDoor();
         }
+    }
+
+    public void NextRoom(int roomNum)
+    {
+        rooms[roomNum].SetActive(false);
+        rooms[roomNum].SetActive(true);
     }
 }

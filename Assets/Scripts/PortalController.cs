@@ -6,6 +6,7 @@ using Vector4 = UnityEngine.Vector4;
 
 public class PortalController : MonoBehaviour
 {
+    [SerializeField] public int portalId;
     private GameObject _pairedPortal;
     private Transform _targetPos;
     private PlayerController _player;
@@ -32,8 +33,13 @@ public class PortalController : MonoBehaviour
         _cam = GetComponentInChildren<Camera>();
         _parentWall = transform.parent.gameObject;
         _wallCollider = _parentWall.GetComponent<Collider>();
+        
+        _cam.aspect = ((float)Screen.width) / Screen.height;
+    }
 
-        if (gameObject.CompareTag("Portal1")) 
+    private void Update()
+    {
+        if (gameObject.CompareTag("Portal1"))
         {
             _pairedPortal = GameObject.FindGameObjectWithTag("Portal2");
         }
@@ -41,12 +47,13 @@ public class PortalController : MonoBehaviour
         {
             _pairedPortal = GameObject.FindGameObjectWithTag("Portal1");
         }
-        
-        _targetPos = _pairedPortal.transform.GetChild(0);
 
-        _cam.aspect = ((float)Screen.width) / Screen.height;
+        if (_pairedPortal)
+        {
+            _targetPos = _pairedPortal.transform.GetChild(0);
+        }
+
     }
-    
 
     void LateUpdate()
     {

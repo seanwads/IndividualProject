@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private PortalController _portal1;
-    private PortalController _portal2;
+    [SerializeField] public GameObject portal1;
+    [SerializeField] public GameObject portal2;
+    private PortalController _curPortal1;
+    private PortalController _curPortal2;
     
     private Animator _animator;
     public float speed = 5f;
@@ -16,12 +18,14 @@ public class PlayerController : MonoBehaviour
 
     private Camera _camera;
     private bool _isHoldingItem;
-    public bool canDropItem;
     public float throwingForce = 4f;
+
+    public float portalShootDistance = 30f;
+    private LayerMask _ignoreRaycast;
     void Start()
     {
-        _portal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
-        _portal2 = GameObject.FindGameObjectWithTag("Portal2").GetComponent<PortalController>();
+        _curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
+        _curPortal2 = GameObject.FindGameObjectWithTag("Portal2").GetComponent<PortalController>();
         
         _animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -29,6 +33,7 @@ public class PlayerController : MonoBehaviour
         _cameraController = GetComponentInChildren<CameraController>();
         _pickupAnchor = GameObject.FindGameObjectWithTag("PickupAnchor").transform;
         _camera = GetComponentInChildren<Camera>();
+        _ignoreRaycast = LayerMask.GetMask("Ignore Raycast");
     }
 
     // Update is called once per frame
@@ -54,11 +59,11 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown("f"))
         {
             if (_isHoldingItem)
             {
-                if (!_portal1.itemInPortal && !_portal2.itemInPortal)
+                if (!_curPortal1.itemInPortal && !_curPortal2.itemInPortal)
                 {
                     DropItem();
                 }
@@ -77,6 +82,16 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            ShootPortal(1);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            ShootPortal(2);
         }
     }
 
@@ -116,5 +131,38 @@ public class PlayerController : MonoBehaviour
         
         i.transform.SetParent(_pickupAnchor);
         i.transform.localPosition = Vector3.zero;
+    }
+
+    private void ShootPortal(int portalNum)
+    {
+        Ray ray = _camera.ViewportPointToRay(Vector3.one * 0.5f);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, portalShootDistance, ~_ignoreRaycast))
+        {
+            if (hit.transform.CompareTag("PortalWall"))
+            {
+                if (portalNum == 1)
+                {
+                    if (_curPortal1 != null)
+                    {
+                        Destroy(_curPortal1.gameObject);
+                    }
+                    _curPortal1 = Instantiate(portal1, hit.point, hit.transform.rotation).GetComponent<PortalController>();
+                    _curPortal1.transform.SetParent(hit.transform, true);
+
+                }
+                else if (portalNum == 2)
+                {
+                    if (_curPortal2 != null)
+                    {
+                        Destroy(_curPortal2.gameObject);
+                    }
+                    _curPortal2 = Instantiate(portal2, hit.point, hit.transform.rotation).GetComponent<PortalController>();
+                    _curPortal2.transform.SetParent(hit.transform, true);
+                }
+                
+            }
+        }
     }
 }
