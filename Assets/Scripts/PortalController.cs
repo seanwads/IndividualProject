@@ -25,22 +25,11 @@ public class PortalController : MonoBehaviour
     public bool itemInPortal;
     private bool _itemHasPassed;
     private bool _itemIsThrough;
-
-    [SerializeField] public float minHeight;
-    [SerializeField] public float maxHeight;
+    
     
 
     void Start()
     {
-        if (transform.position.y < minHeight)
-        {
-            transform.position = new Vector3(transform.position.x, minHeight, transform.position.z);
-        }
-        else if (transform.position.y > maxHeight)
-        {
-            transform.position = new Vector3(transform.position.x, maxHeight, transform.position.z);
-        }
-        
         _player = FindObjectOfType<PlayerController>();
         _playerCam = GameObject.FindGameObjectWithTag("PlayerCamera").GetComponent<Camera>();
         _cam = GetComponentInChildren<Camera>();

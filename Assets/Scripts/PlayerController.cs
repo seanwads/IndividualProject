@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
 
     public float portalShootDistance = 30f;
     private LayerMask _ignoreRaycast;
+    
+    [SerializeField] public float minPortalHeight;
+    [SerializeField] public float maxPortalHeight;
     void Start()
     {
         _curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
@@ -142,6 +145,17 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.CompareTag("PortalWall"))
             {
+                
+                if (hit.point.y < minPortalHeight)
+                {
+                    hit.point = new Vector3(hit.point.x, minPortalHeight, hit.point.z);
+                }
+                else if (hit.point.y > maxPortalHeight)
+                {
+                    hit.point = new Vector3(hit.point.x, maxPortalHeight, hit.point.z);
+                }
+                
+                
                 if (portalNum == 1)
                 {
                     if (_curPortal1 != null)

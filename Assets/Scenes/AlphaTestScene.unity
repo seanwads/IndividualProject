@@ -3367,6 +3367,16 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 3707244035167212085, guid: fe8efe85d0e681748ab352cd13c5fd03,
         type: 3}
+      propertyPath: maxPortalHeight
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3707244035167212085, guid: fe8efe85d0e681748ab352cd13c5fd03,
+        type: 3}
+      propertyPath: minPortalHeight
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3707244035167212085, guid: fe8efe85d0e681748ab352cd13c5fd03,
+        type: 3}
       propertyPath: portals.Array.size
       value: 2
       objectReference: {fileID: 0}
