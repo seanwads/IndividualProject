@@ -26,8 +26,21 @@ public class PortalController : MonoBehaviour
     private bool _itemHasPassed;
     private bool _itemIsThrough;
 
+    [SerializeField] public float minHeight;
+    [SerializeField] public float maxHeight;
+    
+
     void Start()
     {
+        if (transform.position.y < minHeight)
+        {
+            transform.position = new Vector3(transform.position.x, minHeight, transform.position.z);
+        }
+        else if (transform.position.y > maxHeight)
+        {
+            transform.position = new Vector3(transform.position.x, maxHeight, transform.position.z);
+        }
+        
         _player = FindObjectOfType<PlayerController>();
         _playerCam = GameObject.FindGameObjectWithTag("PlayerCamera").GetComponent<Camera>();
         _cam = GetComponentInChildren<Camera>();
@@ -131,31 +144,37 @@ public class PortalController : MonoBehaviour
 
     private void CameraMovement()
     {
-        Vector3 offsetPos = _pairedPortal.transform.InverseTransformPoint(_playerCam.transform.position);
-        offsetPos = Vector3.Scale(offsetPos, new Vector3(-1, 1, -1));
-        _cam.transform.position = transform.TransformPoint(offsetPos);
+        if (_pairedPortal)
+        {
+            Vector3 offsetPos = _pairedPortal.transform.InverseTransformPoint(_playerCam.transform.position);
+            offsetPos = Vector3.Scale(offsetPos, new Vector3(-1, 1, -1));
+            _cam.transform.position = transform.TransformPoint(offsetPos);
 
-        Vector3 offsetRot = _pairedPortal.transform.InverseTransformDirection(_playerCam.transform.forward);
-        offsetRot = Vector3.Scale(offsetRot, new Vector3(-1, 1, -1));
-        _cam.transform.forward = transform.TransformDirection(offsetRot);
+            Vector3 offsetRot = _pairedPortal.transform.InverseTransformDirection(_playerCam.transform.forward);
+            offsetRot = Vector3.Scale(offsetRot, new Vector3(-1, 1, -1));
+            _cam.transform.forward = transform.TransformDirection(offsetRot);
+        }
     }
 
     private void CalculateClipPlane()
     {
-        Transform clipPlane = transform;
-        int dot = System.Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - _cam.transform.position));
+        if (_pairedPortal)
+        {
+            Transform clipPlane = transform;
+            int dot = System.Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - _cam.transform.position));
 
-        Vector3 camSpacePos = _cam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
-        Vector3 camSpaceNormal = _cam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
-        float camSpaceDst = -Vector3.Dot (camSpacePos, camSpaceNormal) + nearClipOffset;
+            Vector3 camSpacePos = _cam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
+            Vector3 camSpaceNormal = _cam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
+            float camSpaceDst = -Vector3.Dot (camSpacePos, camSpaceNormal) + nearClipOffset;
 
-        // Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
-        if (Mathf.Abs (camSpaceDst) > nearClipLimit) {
-            Vector4 clipPlaneCameraSpace = new Vector4 (camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
+            // Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
+            if (Mathf.Abs (camSpaceDst) > nearClipLimit) {
+                Vector4 clipPlaneCameraSpace = new Vector4 (camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
 
-            // Update projection based on new clip plane
-            // Calculate matrix with player cam so that player camera settings (fov, etc) are used
-            _cam.projectionMatrix = _cam.CalculateObliqueMatrix(clipPlaneCameraSpace);
+                // Update projection based on new clip plane
+                // Calculate matrix with player cam so that player camera settings (fov, etc) are used
+                _cam.projectionMatrix = _cam.CalculateObliqueMatrix(clipPlaneCameraSpace);
+            }
         }
     }
 
@@ -168,17 +187,20 @@ public class PortalController : MonoBehaviour
 
     private void MoveSplitItem()
     {
-        _splitItemRb.isKinematic = true;
-        _splitItemRb.velocity = Vector3.zero;
-        _splitItemRb.angularVelocity = Vector3.zero;
+        if (_pairedPortal)
+        {
+            _splitItemRb.isKinematic = true;
+            _splitItemRb.velocity = Vector3.zero;
+            _splitItemRb.angularVelocity = Vector3.zero;
         
-        Vector3 itemOffsetPos = transform.InverseTransformPoint(_itemToSplit.transform.position);
-        itemOffsetPos = Vector3.Scale(itemOffsetPos, new Vector3(-1, 1, -1));
-        _splitItem.transform.position = _pairedPortal.transform.TransformPoint(itemOffsetPos);
+            Vector3 itemOffsetPos = transform.InverseTransformPoint(_itemToSplit.transform.position);
+            itemOffsetPos = Vector3.Scale(itemOffsetPos, new Vector3(-1, 1, -1));
+            _splitItem.transform.position = _pairedPortal.transform.TransformPoint(itemOffsetPos);
         
-        Vector3 itemOffsetRot = transform.InverseTransformDirection(_itemToSplit.transform.forward);
-        itemOffsetRot = Vector3.Scale(itemOffsetRot, new Vector3(-1, 1, -1));
-        _splitItem.transform.forward = _pairedPortal.transform.TransformDirection(itemOffsetRot);
+            Vector3 itemOffsetRot = transform.InverseTransformDirection(_itemToSplit.transform.forward);
+            itemOffsetRot = Vector3.Scale(itemOffsetRot, new Vector3(-1, 1, -1));
+            _splitItem.transform.forward = _pairedPortal.transform.TransformDirection(itemOffsetRot);
+        }
     }
 
 }
