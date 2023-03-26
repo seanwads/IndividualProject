@@ -1,30 +1,34 @@
+using UnityEditor;
 using UnityEngine;
 
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] public GameObject portal1;
-    [SerializeField] public GameObject portal2;
+    [SerializeField] private GameObject portal1;
+    [SerializeField] private GameObject portal2;
     private PortalController _curPortal1;
     private PortalController _curPortal2;
     
     private Animator _animator;
-    public float speed = 5f;
+    [SerializeField] private float speed = 5f;
     private Rigidbody _rb;
-    public float jumpSpeed = 150f;
+    [SerializeField] private float jumpSpeed = 150f;
     private Vector3 _velocity;
     private CameraController _cameraController;
     private Transform _pickupAnchor;
 
     private Camera _camera;
     private bool _isHoldingItem;
-    public float throwingForce = 4f;
+    [SerializeField] private float throwingForce = 4f;
 
     public float portalShootDistance = 30f;
     private LayerMask _ignoreRaycast;
     
-    [SerializeField] public float minPortalHeight;
-    [SerializeField] public float maxPortalHeight;
+    [SerializeField] private float minPortalHeight;
+    [SerializeField] private float maxPortalHeight;
+
+    private float _maxHealth = 100f;
+    private float _currentHealth = 100f;
     void Start()
     {
         _curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
@@ -177,6 +181,21 @@ public class PlayerController : MonoBehaviour
                 }
                 
             }
+        }
+    }
+
+    public float GetHealthPercent()
+    {
+        float hp = _currentHealth / _maxHealth;
+        return hp;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _currentHealth = _currentHealth - damage;
+        if (_currentHealth <= 0)
+        {
+            //character dies
         }
     }
 }
