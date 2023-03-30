@@ -25,6 +25,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackRecoveryTime;
     private float _attackTimer;
+    [SerializeField] private float attackDamage;
         
 
     void Start()
@@ -32,7 +33,6 @@ public class EnemyAI : MonoBehaviour
         _curState = States.Idle;
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         _nav = GetComponent<NavMeshAgent>();
-        _attackTimer = attackRecoveryTime;
     }
 
     void Update()
@@ -51,7 +51,6 @@ public class EnemyAI : MonoBehaviour
             }
             case States.Attack:
             {
-
                 Attack();
                 break;
             }
@@ -91,6 +90,16 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
+            if (_attackTimer > 0)
+            {
+                _attackTimer -= Time.deltaTime;
+            }
+            else
+            {
+                //make attack
+                _player.TakeDamage(attackDamage);
+                _attackTimer = attackRecoveryTime;
+            }
         }
     }
     

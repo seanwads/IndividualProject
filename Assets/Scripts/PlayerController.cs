@@ -66,6 +66,16 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = 7f;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = 5f;
+        }
+
         if (Input.GetKeyDown("f"))
         {
             if (_isHoldingItem)
