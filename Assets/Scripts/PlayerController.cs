@@ -1,3 +1,4 @@
+using System.Diagnostics.Eventing.Reader;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,6 +30,12 @@ public class PlayerController : MonoBehaviour
 
     private float _maxHealth = 100f;
     private float _currentHealth = 100f;
+
+    private float _fallDamageTimer;
+    private bool _isGrounded = true;
+    private bool _isFalling;
+    [SerializeField] private float fallDamageThreshold;
+    [SerializeField] private float fallDamageMultiplier;
     void Start()
     {
         _curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
@@ -116,6 +123,30 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetTrigger("Jump");
         _rb.AddForce(Vector3.up * jumpSpeed);
+    }
+
+    private void CheckFallDamage()
+    {
+        RaycastHit hit;
+        _isGrounded = Physics.Raycast(transform.position, -Vector3.up, out hit, 0.1f);
+        if (!_isGrounded)
+        {
+            _fallDamageTimer += Time.deltaTime;
+            _isFalling = true;
+        }
+        else
+        {
+            if (_isFalling)
+            {
+                if (_fallDamageTimer > fallDamageThreshold)
+                {
+                    TakeDamage(_fallDamageTimer * fallDamageMultiplier);
+                }
+
+                _fallDamageTimer = 0f;
+                _isFalling = false;
+            }
+        }
     }
 
     public void Teleport(Transform target)
