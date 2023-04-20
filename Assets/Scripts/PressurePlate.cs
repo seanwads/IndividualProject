@@ -9,6 +9,7 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] public float plateTimer = 3f;
     [SerializeField] public float massRequirement = 1f;
     private SceneManager _sceneManager;
+    
     void Start()
     {
         _sceneManager = FindObjectOfType<SceneManager>();

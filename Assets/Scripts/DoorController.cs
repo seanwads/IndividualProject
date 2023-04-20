@@ -1,24 +1,30 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
     [SerializeField] public int doorId;
-    private GameObject _doorMesh;
+    private Animator _animator;
+    public bool doorOpen;
 
     void Start()
     {
-        _doorMesh = transform.GetChild(0).gameObject;
+        _animator = GetComponent<Animator>();
     }
 
     public void OpenDoor()
     {
-        _doorMesh.SetActive(false);
+        _animator.Play("DoorOpen");
+        doorOpen = true;
     }
 
     public void CloseDoor()
     {
-        _doorMesh.SetActive(true);
+        _animator.Play("DoorClose");
+        doorOpen = false;
     }
+    
 }

@@ -38,8 +38,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fallDamageMultiplier;
     void Start()
     {
-        _curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
-        _curPortal2 = GameObject.FindGameObjectWithTag("Portal2").GetComponent<PortalController>();
+        //_curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
+        //_curPortal2 = GameObject.FindGameObjectWithTag("Portal2").GetComponent<PortalController>();
         
         _animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;

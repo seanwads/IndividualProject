@@ -8,6 +8,7 @@ public class SceneManager : MonoBehaviour
 {
     [SerializeField] public GameObject[] rooms;
     public Dictionary<int, DoorController> _doors = new Dictionary<int, DoorController>();
+    private GameObject[] _spawnPoints;
 
     void Start()
     {
@@ -16,24 +17,21 @@ public class SceneManager : MonoBehaviour
         {
             _doors.Add(d.doorId, d);
         }
+
+        _spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
     }
 
     public void DoorAction(int id)
     {
         DoorController door = _doors[id];
-        if (door.transform.GetChild(0).gameObject.activeSelf)
-        {
-            door.OpenDoor();
-        }
-        else
+        
+        if (door.doorOpen)
         {
             door.CloseDoor();
         }
-    }
-
-    public void NextRoom(int roomNum)
-    {
-        rooms[roomNum].SetActive(false);
-        rooms[roomNum].SetActive(true);
+        else
+        {
+            door.OpenDoor();
+        }
     }
 }
