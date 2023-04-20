@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private GameMenuManager _gameMenuManager;
+    
     [SerializeField] private GameObject portal1;
     [SerializeField] private GameObject portal2;
     private PortalController _curPortal1;
@@ -29,7 +31,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxPortalHeight;
 
     private float _maxHealth = 100f;
-    private float _currentHealth = 100f;
+    public float currentHealth = 100f;
 
     private float _fallDamageTimer;
     private bool _isGrounded = true;
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         //_curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
         //_curPortal2 = GameObject.FindGameObjectWithTag("Portal2").GetComponent<PortalController>();
-        
+        _gameMenuManager = FindObjectOfType<GameMenuManager>();
         _animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         _rb = gameObject.GetComponent<Rigidbody>();
@@ -227,16 +229,18 @@ public class PlayerController : MonoBehaviour
 
     public float GetHealthPercent()
     {
-        float hp = _currentHealth / _maxHealth;
+        float hp = currentHealth / _maxHealth;
         return hp;
     }
 
     public void TakeDamage(float damage)
     {
-        _currentHealth = _currentHealth - damage;
-        if (_currentHealth <= 0)
+        currentHealth = currentHealth - damage;
+        
+        if (currentHealth <= 0)
         {
-            //character dies
+            _gameMenuManager.PlayerDeath();
+            gameObject.SetActive(false);
         }
     }
 }

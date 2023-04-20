@@ -2,14 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SceneManager : MonoBehaviour
 {
     [SerializeField] public GameObject[] rooms;
     public Dictionary<int, DoorController> _doors = new Dictionary<int, DoorController>();
-    private GameObject[] _spawnPoints;
-
+    private PlayerController _player;
+    public Transform curCheckpoint;
+    private ItemPickup[] _items;
+    
     void Start()
     {
         DoorController[] tempDoors = FindObjectsOfType<DoorController>();
@@ -17,8 +21,8 @@ public class SceneManager : MonoBehaviour
         {
             _doors.Add(d.doorId, d);
         }
-
-        _spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        _player = FindObjectOfType<PlayerController>();
+        _items = FindObjectsOfType<ItemPickup>();
     }
 
     public void DoorAction(int id)
@@ -33,5 +37,17 @@ public class SceneManager : MonoBehaviour
         {
             door.OpenDoor();
         }
+    }
+
+    public void Respawn()
+    {
+        foreach (ItemPickup i in _items)
+        {
+            i.Reset();
+        }
+
+        _player.transform.position = curCheckpoint.transform.position;
+        _player.currentHealth = 100f;
+        _player.gameObject.SetActive(true);
     }
 }
