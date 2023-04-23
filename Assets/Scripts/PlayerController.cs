@@ -275,7 +275,7 @@ public class PlayerController : MonoBehaviour
         if (currentHealth <= 0)
         {
             _gameMenuManager.PlayerDeath();
-            this.enabled = false;
+            gameObject.SetActive(false);
         }
     }
 }

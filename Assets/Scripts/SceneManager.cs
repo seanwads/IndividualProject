@@ -48,6 +48,6 @@ public class SceneManager : MonoBehaviour
 
         _player.transform.position = curCheckpoint.transform.position;
         _player.currentHealth = 100f;
-        _player.enabled = true;
+        _player.gameObject.SetActive(true);
     }
 }

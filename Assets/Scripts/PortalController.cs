@@ -32,7 +32,7 @@ public class PortalController : MonoBehaviour
     void Start()
     {
         _player = FindObjectOfType<PlayerController>();
-        _playerCam = GameObject.FindGameObjectWithTag("PlayerCamera").GetComponent<Camera>();
+        _playerCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _cam = GetComponentInChildren<Camera>();
         _parentWall = transform.parent.gameObject;
         _wallCollider = _parentWall.GetComponent<Collider>();

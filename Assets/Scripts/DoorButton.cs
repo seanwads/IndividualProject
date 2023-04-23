@@ -11,7 +11,7 @@ public class DoorButton : MonoBehaviour
     
     void Start()
     {
-        _cam = GameObject.FindGameObjectWithTag("PlayerCamera").GetComponent<Camera>();
+        _cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _sceneManager = FindObjectOfType<SceneManager>();
     }
     

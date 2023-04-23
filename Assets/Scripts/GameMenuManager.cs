@@ -36,7 +36,7 @@ public class GameMenuManager : MonoBehaviour
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
