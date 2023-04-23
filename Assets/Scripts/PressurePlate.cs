@@ -6,9 +6,9 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     [SerializeField] public int plateId;
-    [SerializeField] public float plateTimer = 3f;
     [SerializeField] public float massRequirement = 1f;
     private SceneManager _sceneManager;
+    private bool _plateActive;
     
     void Start()
     {
@@ -18,9 +18,10 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Rigidbody>().mass >= massRequirement)
+        if (other.GetComponent<Rigidbody>().mass >= massRequirement && !_plateActive)
         {
             _sceneManager.DoorAction(plateId);
+            _plateActive = true;
         }
     }
 
@@ -29,6 +30,7 @@ public class PressurePlate : MonoBehaviour
         if (other.GetComponent<Rigidbody>().mass >= massRequirement)
         {
             _sceneManager.DoorAction(plateId);
+            _plateActive = false;
         }
     }
 }

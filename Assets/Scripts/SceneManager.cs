@@ -8,10 +8,10 @@ using UnityEngine.Rendering;
 
 public class SceneManager : MonoBehaviour
 {
-    [SerializeField] public GameObject[] rooms;
     public Dictionary<int, DoorController> _doors = new Dictionary<int, DoorController>();
     private PlayerController _player;
     public Transform curCheckpoint;
+    public int checkpointNum;
     private ItemPickup[] _items;
     
     void Start()
@@ -48,6 +48,6 @@ public class SceneManager : MonoBehaviour
 
         _player.transform.position = curCheckpoint.transform.position;
         _player.currentHealth = 100f;
-        _player.gameObject.SetActive(true);
+        _player.enabled = true;
     }
 }

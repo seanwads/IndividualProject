@@ -64,7 +64,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: edcc975f4ddc7ab4d8f784b2446c97b1, type: 2}
   m_TargetDisplay: 0
@@ -187,8 +187,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.5}
-  m_Center: {x: 0, y: 0, z: 0.1}
+  m_Size: {x: 1, y: 1.0797634, z: 0.5}
+  m_Center: {x: 0, y: -0.006290585, z: 0.099999994}
 --- !u!114 &1177899938590428524
 MonoBehaviour:
   m_ObjectHideFlags: 0

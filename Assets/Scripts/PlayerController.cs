@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using UnityEditor;
 using UnityEngine;
@@ -6,12 +7,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private GameMenuManager _gameMenuManager;
-    
+    private SceneManager _sceneManager;
+
     [SerializeField] private GameObject portal1;
     [SerializeField] private GameObject portal2;
     private PortalController _curPortal1;
     private PortalController _curPortal2;
-    
+
     private Animator _animator;
     [SerializeField] private float speed = 5f;
     private Rigidbody _rb;
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
     public float portalShootDistance = 30f;
     private LayerMask _ignoreRaycast;
-    
+
     [SerializeField] private float minPortalHeight;
     [SerializeField] private float maxPortalHeight;
 
@@ -38,13 +40,14 @@ public class PlayerController : MonoBehaviour
     private bool _isFalling;
     [SerializeField] private float fallDamageThreshold;
     [SerializeField] private float fallDamageMultiplier;
+
+    private int _checkpointNum;
+
     void Start()
     {
-        //_curPortal1 = GameObject.FindGameObjectWithTag("Portal1").GetComponent<PortalController>();
-        //_curPortal2 = GameObject.FindGameObjectWithTag("Portal2").GetComponent<PortalController>();
         _gameMenuManager = FindObjectOfType<GameMenuManager>();
+        _sceneManager = FindObjectOfType<SceneManager>();
         _animator = GetComponent<Animator>();
-        Cursor.lockState = CursorLockMode.Locked;
         _rb = gameObject.GetComponent<Rigidbody>();
         _cameraController = GetComponentInChildren<CameraController>();
         _pickupAnchor = GameObject.FindGameObjectWithTag("PickupAnchor").transform;
@@ -56,13 +59,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         _velocity = _rb.velocity;
-        
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
         _animator.SetFloat("Speed", v);
         _animator.SetFloat("Rotation", h);
-        
+
         transform.Translate(h * speed * Time.deltaTime, 0, v * speed * Time.deltaTime);
 
         if (Input.GetKeyDown("escape"))
@@ -85,7 +88,7 @@ public class PlayerController : MonoBehaviour
             speed = 5f;
         }
 
-        if (Input.GetKeyDown("f"))
+        if (Input.GetKeyDown("e"))
         {
             if (_isHoldingItem)
             {
@@ -119,6 +122,9 @@ public class PlayerController : MonoBehaviour
         {
             ShootPortal(2);
         }
+
+        _checkpointNum = _sceneManager.checkpointNum;
+
     }
 
     private void Jump()
@@ -157,7 +163,7 @@ public class PlayerController : MonoBehaviour
         _cameraController.mouseLook = new Vector2(target.eulerAngles.y, 0f);
         _rb.AddForce(_velocity);
     }
-    
+
     private void DropItem()
     {
         ItemPickup i = _pickupAnchor.GetChild(0).GetComponent<ItemPickup>();
@@ -173,12 +179,12 @@ public class PlayerController : MonoBehaviour
     private void PickupItem(ItemPickup i)
     {
         _isHoldingItem = true;
-        
+
         Rigidbody rb = i.GetComponent<Rigidbody>();
         rb.isKinematic = true;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        
+
         i.transform.SetParent(_pickupAnchor);
         i.transform.localPosition = Vector3.zero;
     }
@@ -192,6 +198,8 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.CompareTag("PortalWall"))
             {
+
+                CheckMinMaxHeight();
                 
                 if (hit.point.y < minPortalHeight)
                 {
@@ -202,14 +210,16 @@ public class PlayerController : MonoBehaviour
                     hit.point = new Vector3(hit.point.x, maxPortalHeight, hit.point.z);
                 }
                 
-                
+
                 if (portalNum == 1)
                 {
                     if (_curPortal1 != null)
                     {
                         Destroy(_curPortal1.gameObject);
                     }
-                    _curPortal1 = Instantiate(portal1, hit.point, hit.transform.rotation).GetComponent<PortalController>();
+
+                    _curPortal1 = Instantiate(portal1, hit.point, hit.transform.rotation)
+                        .GetComponent<PortalController>();
                     _curPortal1.transform.SetParent(hit.transform, true);
 
                 }
@@ -219,11 +229,36 @@ public class PlayerController : MonoBehaviour
                     {
                         Destroy(_curPortal2.gameObject);
                     }
-                    _curPortal2 = Instantiate(portal2, hit.point, hit.transform.rotation).GetComponent<PortalController>();
+
+                    _curPortal2 = Instantiate(portal2, hit.point, hit.transform.rotation)
+                        .GetComponent<PortalController>();
                     _curPortal2.transform.SetParent(hit.transform, true);
                 }
-                
+
             }
+        }
+    }
+
+    private void CheckMinMaxHeight()
+    {
+        switch (_checkpointNum)
+        {
+            case 1:
+                minPortalHeight = -2.2f;
+                maxPortalHeight = -0.2f;
+                break;
+            case 2:
+                minPortalHeight = 2.3f;
+                maxPortalHeight = 9.3f;
+                break;
+            case 3:
+                minPortalHeight = -2.75f;
+                maxPortalHeight = 4.6f;
+                break;
+            case 4:
+                minPortalHeight = -2.75f;
+                maxPortalHeight = 4.6f;
+                break;
         }
     }
 
@@ -240,7 +275,7 @@ public class PlayerController : MonoBehaviour
         if (currentHealth <= 0)
         {
             _gameMenuManager.PlayerDeath();
-            gameObject.SetActive(false);
+            this.enabled = false;
         }
     }
 }

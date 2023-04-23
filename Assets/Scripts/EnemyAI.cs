@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.UI;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,6 +24,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float attackRecoveryTime;
     private float _attackTimer;
     [SerializeField] private float attackDamage;
+    private Animator _animator;
+    private bool _isRunning;
         
 
     void Start()
@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour
         _curState = States.Idle;
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         _nav = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -41,11 +42,13 @@ public class EnemyAI : MonoBehaviour
         {
             case States.Idle:
             {
+                _isRunning = false;
                 Idle();
                 break;
             }
             case States.Chase:
             {
+                _isRunning = true;
                 Chase();
                 break;
             }
@@ -55,6 +58,8 @@ public class EnemyAI : MonoBehaviour
                 break;
             }
         }
+        _animator.SetBool("isRunning", _isRunning);
+        Debug.Log(_animator.GetBool("isRunning"));
     }
 
     private void Idle()
@@ -84,7 +89,11 @@ public class EnemyAI : MonoBehaviour
 
     private void Attack()
     {
-        if (!Physics.CheckSphere(transform.position, attackRadius, playerMask))
+        if (!Physics.CheckSphere(transform.position, chasingRadius, playerMask))
+        {
+            _curState = States.Idle;
+        }
+        else if (!Physics.CheckSphere(transform.position, attackRadius, playerMask))
         {
             _curState = States.Chase;
         }
@@ -96,7 +105,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                //make attack
+                _animator.Play("Attack");
                 _player.TakeDamage(attackDamage);
                 _attackTimer = attackRecoveryTime;
             }

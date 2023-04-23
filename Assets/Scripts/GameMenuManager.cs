@@ -7,16 +7,22 @@ using UnityEngine.UI;
 public class GameMenuManager : MonoBehaviour
 {
     private PlayerController _player;
-    [SerializeField] private RawImage _hpBar;
+    [SerializeField] private RawImage hpBar;
     private Slider _hpSlider;
-    [SerializeField] private GameObject _deathScreen;
-    [SerializeField] private GameObject _pauseMenu;
+    [SerializeField] private GameObject deathScreen;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject endGameScreen;
     private SceneManager _sceneManager;
-    void Start()
+
+    [SerializeField] private GameObject[] tutorialWindows;
+    private int _curTutorial;
+    private bool _tutorialActive;
+
+        void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        _hpSlider = _hpBar.GetComponent<Slider>();
-        _deathScreen.SetActive(false);
+        _hpSlider = hpBar.GetComponent<Slider>();
+        deathScreen.SetActive(false);
         _sceneManager = FindObjectOfType<SceneManager>();
     }
     
@@ -24,28 +30,47 @@ public class GameMenuManager : MonoBehaviour
     {
         _hpSlider.value = _player.GetHealthPercent();
 
+        if (!pauseMenu.activeSelf && !deathScreen.activeSelf && !endGameScreen.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (_pauseMenu.activeSelf)
+            if (_tutorialActive)
             {
-                _pauseMenu.SetActive(false);
+                tutorialWindows[_curTutorial].SetActive(false);
+                _curTutorial++;
+                _tutorialActive = false;
             }
             else
             {
-                _pauseMenu.SetActive(true);
+                if (pauseMenu.activeSelf)
+                {
+                    pauseMenu.SetActive(false);
+                }
+                else
+                {
+                    pauseMenu.SetActive(true);
+                }
             }
         }
+        
     }
 
     public void PlayerDeath()
     {
-        _deathScreen.SetActive(true);
+        deathScreen.SetActive(true);
     }
 
     public void RespawnButton()
     {
         _sceneManager.Respawn();
-        _deathScreen.SetActive(false);
+        deathScreen.SetActive(false);
     }
 
     public void MainMenuButton()
@@ -56,4 +81,16 @@ public class GameMenuManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void EndGame()
+    {
+        endGameScreen.SetActive(true);
+    }
+
+    public void Tutorial()
+    {
+        tutorialWindows[_curTutorial].SetActive(true);
+        _tutorialActive = true;
+    }
+    
 }

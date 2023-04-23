@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json.Bson;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -35,7 +36,6 @@ public class PortalController : MonoBehaviour
         _cam = GetComponentInChildren<Camera>();
         _parentWall = transform.parent.gameObject;
         _wallCollider = _parentWall.GetComponent<Collider>();
-        
         _cam.aspect = ((float)Screen.width) / Screen.height;
     }
 
@@ -95,6 +95,7 @@ public class PortalController : MonoBehaviour
             
         }
     }
+    
 
     private void OnTriggerStay(Collider other)
     {
