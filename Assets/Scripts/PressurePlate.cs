@@ -7,6 +7,7 @@ public class PressurePlate : MonoBehaviour
 {
     [SerializeField] public int plateId;
     [SerializeField] public float massRequirement = 1f;
+    private float _currentMass;
     private SceneManager _sceneManager;
     private bool _plateActive;
     
@@ -18,7 +19,8 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Rigidbody>().mass >= massRequirement && !_plateActive)
+        _currentMass += other.GetComponent<Rigidbody>().mass;
+        if (_currentMass >= massRequirement && !_plateActive)
         {
             _sceneManager.DoorAction(plateId);
             _plateActive = true;
@@ -27,7 +29,8 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Rigidbody>().mass >= massRequirement)
+        _currentMass -= other.GetComponent<Rigidbody>().mass;
+        if (_currentMass < massRequirement)
         {
             _sceneManager.DoorAction(plateId);
             _plateActive = false;

@@ -62,6 +62,10 @@ public class PortalController : MonoBehaviour
         CameraMovement();
         CalculateClipPlane();
 
+    }
+
+    private void FixedUpdate()
+    {
         if (itemInPortal)
         {
             MoveSplitItem();
@@ -162,7 +166,6 @@ public class PortalController : MonoBehaviour
                 Vector4 clipPlaneCameraSpace = new Vector4 (camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
 
                 // Update projection based on new clip plane
-                // Calculate matrix with player cam so that player camera settings (fov, etc) are used
                 _cam.projectionMatrix = _cam.CalculateObliqueMatrix(clipPlaneCameraSpace);
             }
         }

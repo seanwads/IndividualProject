@@ -129,8 +129,13 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        _animator.SetTrigger("Jump");
-        _rb.AddForce(Vector3.up * jumpSpeed);
+        RaycastHit hit;
+        _isGrounded = Physics.Raycast(transform.position, -Vector3.up, out hit, 0.1f);
+        if (_isGrounded)
+        {
+            _animator.SetTrigger("Jump");
+            _rb.AddForce(Vector3.up * jumpSpeed);
+        }
     }
 
     private void CheckFallDamage()
