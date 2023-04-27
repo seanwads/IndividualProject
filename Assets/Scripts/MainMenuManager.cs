@@ -6,10 +6,17 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _credits;
+    [SerializeField] private GameObject _story;
 
     public void StartButton()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+    
+    public void ContinueButton()
+    {
+        _mainMenu.SetActive(false); 
+        _story.SetActive(true);
     }
 
     public void CreditsButton()
