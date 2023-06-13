@@ -24,7 +24,7 @@ public class DoorButton : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 3f))
             {
-                if (hit.transform.CompareTag("DoorButton"))
+                if (hit.transform.Equals(this.transform))
                 {
                     StartCoroutine(ButtonPress());
                 }
@@ -35,6 +35,7 @@ public class DoorButton : MonoBehaviour
     private IEnumerator ButtonPress()
     {
         _sceneManager.DoorAction(buttonId);
+        Debug.Log("opening " + buttonId);
         yield return new WaitForSeconds(buttonTimer);
         _sceneManager.DoorAction(buttonId);
     }

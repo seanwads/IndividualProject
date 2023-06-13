@@ -29297,6 +29297,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3707244034106876489, guid: fe8efe85d0e681748ab352cd13c5fd03,
         type: 3}
+      propertyPath: m_RenderShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3707244034106876489, guid: fe8efe85d0e681748ab352cd13c5fd03,
+        type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
       objectReference: {fileID: 0}
@@ -29304,6 +29309,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3707244034106876503, guid: fe8efe85d0e681748ab352cd13c5fd03,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3707244034106876503, guid: fe8efe85d0e681748ab352cd13c5fd03,
         type: 3}
